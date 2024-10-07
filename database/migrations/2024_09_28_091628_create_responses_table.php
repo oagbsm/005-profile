@@ -4,30 +4,23 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
+class CreateResponsesTable extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
+    public function up()
     {
         Schema::create('responses', function (Blueprint $table) {
-            $table->id(); // Unique identifier for each response
-            $table->unsignedBigInteger('survey_id'); // References the survey
-            $table->text('formatted_answers'); // Stores answers in a structured format
-            $table->timestamps(); // created_at and updated_at timestamps
-            $table->unsignedBigInteger('user_id'); // References the survey
-
-            // Foreign key constraints
-            // $table->foreign('survey_id')->references('id')->on('surveys')->onDelete('cascade');
+            $table->id();
+            $table->foreignId('survey_id')->constrained()->onDelete('cascade'); // Reference to surveys table
+            $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Reference to users table
+            $table->foreignId('question_id')->constrained()->onDelete('cascade'); // Reference to questions table
+            $table->text('answer_text')->nullable(); // To store text answers
+            $table->foreignId('option_id')->nullable()->constrained()->onDelete('cascade'); // To store selected option
+            $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
-        Schema::dropIfExists('survey_responses');
+        Schema::dropIfExists('responses');
     }
-};
+}

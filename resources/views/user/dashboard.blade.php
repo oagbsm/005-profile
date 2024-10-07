@@ -10,7 +10,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-lg sm:rounded-lg">
                 <div class="p-6 text-gray-900">
-                    <h2 class="text-xl font-semibold">Credits: ${{ $completedCount * 0.5 }} Earn credits by watching videos, playing games, and completing surveys!</h2>
+                    <h2 class="text-xl font-semibold">Credits: ${{ $credits->amount ?? 0 }} Earn credits by watching videos, playing games, and completing surveys!</h2>
                 </div>
             </div>
 
@@ -23,16 +23,16 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         @foreach ($surveys as $survey)
                             <div class="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
-                                <h2 class="text-xl font-semibold mb-2">{{ $survey->title }}</h2> <!-- Changed to match the survey field -->
+                                <h2 class="text-xl font-semibold mb-2">{{ $survey->title }}</h2>
                                 <p class="text-gray-700 mb-4">{{ Str::limit($survey->description, 100) }}</p>
-                                <p class="text-gray-600">Target Age: {{ $survey->age ?? 'N/A' }}</p> <!-- Display demographic info -->
+                                <p class="text-gray-600">Target Age: {{ $survey->age ?? 'N/A' }}</p>
                                 <p class="text-gray-600">Location: {{ $survey->location ?? 'N/A' }}</p>
                                 <p class="text-gray-600">Gender: {{ $survey->gender ?? 'N/A' }}</p>
 
                                 <h3 class="text-lg font-semibold mt-4">Questions:</h3>
                                 <ul class="list-disc pl-5 mb-4">
                                     @foreach ($survey->questions as $question)
-                                        <li>{{ $question->question_text }}</li> <!-- Display questions -->
+                                        <li>{{ $question->question_text }}</li>
                                     @endforeach
                                 </ul>
 

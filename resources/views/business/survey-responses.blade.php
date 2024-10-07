@@ -25,6 +25,15 @@
                         <h3 class="text-lg font-semibold text-gray-700">{{ $question['question_text'] }}</h3>
                         <p class="text-gray-500 italic">Question Type: {{ ucfirst($question['question_type']) }}</p> <!-- Display question type -->
                         
+                        <!-- Visualization selection -->
+                        <label for="visualization-select-{{ $questionIndex }}" class="block mt-4 text-gray-600">Choose Visualization:</label>
+                        <select id="visualization-select-{{ $questionIndex }}" class="block w-full p-2 border border-gray-300 rounded mt-1">
+                            <option value="pie">Pie Chart</option>
+                            <option value="bar">Bar Chart</option>
+                            <option value="line">Line Graph</option>
+                            <option value="table">Table</option>
+                        </select>
+                        
                         @if ($question['question_type'] === 'rating' && isset($question['average_rating']))
                             <p class="text-gray-600">Average Rating: <span class="font-bold">{{ number_format($question['average_rating'], 2) }}</span></p>
                         @elseif ($question['question_type'] === 'true-false')

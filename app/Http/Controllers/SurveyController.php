@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\Survey; 
 use App\Models\Question; 
-use App\Models\Credit; // Import the Credit model here
+use App\Models\Credits; // Make sure to import the Credits model
 
 use App\Models\Option; 
 use Illuminate\Support\Facades\Schema;
@@ -81,10 +81,22 @@ public function submitAnswers(Request $request)
     $surveyId = $request->input('survey_id'); // Get the survey ID
     // CREDITS
     $survey = Survey::findOrFail($surveyId);
-    $creditsToAward = $survey->credits; // Assuming you stored credits in the survey
-    dd($creditsToAward);
-    // Award credits to the authenticated user
-    $this->awardCredits(Auth::user()->id, $creditsToAward);
+
+
+    $credits = Credits::where('user_id', $userId)->first(); // Fetch the user's credits record
+
+        if ($credits) {
+            // Increase the amount (for example, adding 10 credits)
+            $credits->amount += 10; // Adjust this value as needed
+            $credits->save(); // Save the updated credits
+        } else {
+            // If no credits record exists for the user, you can create one
+            Credits::create([
+                'user_id' => $userId,
+                'amount' => 10, // Initial amount if it didn't exist
+            ]);
+        }
+
     // Get the answers array from the request
     $answers = $request->input('answers'); // This will be an array of answers with question texts
 
@@ -124,8 +136,10 @@ public function submitAnswers(Request $request)
     return redirect()->route('dashboard'); // Assuming 'dashboard' is the name of the route for '/user'
 }
 
+
 public function userviewsurvey(){
     $userId = auth()->id(); // Get the logged-in user's ID
+    $credits = Credits::where('user_id', $userId)->first(); // Fetch the user's credits record
 
     // Retrieve the user's profile
     $userProfile = UserProfile::where('userid', $userId)->first();
@@ -173,6 +187,7 @@ public function userviewsurvey(){
     return view('user.dashboard', [
         'surveys' => $surveys,
         'completedCount' => $completedCount,
+        'credits'=> $credits,
     ]);
     
 
@@ -466,4 +481,10 @@ public function destroy($id)
         ]);
 
 }
+public function showCredits()
+{
+    $credits = Credits::all(); // Fetch all records from the credits table
+    dd($credits); // Dump and die to display the records
+}
+
 }
